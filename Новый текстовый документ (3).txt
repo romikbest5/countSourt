@@ -1,0 +1,113 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+class automata
+{
+private:
+	unsigned int cash;
+	string menu[3];
+	unsigned int prices[3];
+	string state;
+public:
+	automata();
+	void on();
+	void off();
+	void coin(int value);
+	string * printMenu();
+	string printState();
+	void choise(int number);
+	bool check(int number);
+	void cancel();
+	void cook(int number);
+	void finish();
+};
+
+automata::automata()
+{
+	cash = 0;
+	state = "OFF";
+	menu[0] = "first";
+	prices[0] = 3;
+	menu[1] = "second";
+	prices[1] = 10;
+	menu[2] = "third";
+	prices[2] = 15;
+}
+string automata::printState()
+{
+	return this->state;
+}
+string * automata::printMenu()
+{
+	return this->menu;
+}
+void automata::on()
+{
+	if (this->state == "OFF")
+		this->state = "WAIT";
+}
+void automata::off()
+{
+	if (this->state == "WAIT")
+		this->state = "ON";
+}
+void automata::coin(int value)
+{
+	if (this->state == "WAIT")
+	{
+		this->state = "ACCEPT";
+		this->cash += value;
+	}
+	if (this->state == "ACCEPT")
+	{
+		this->cash += value;
+	}
+}
+void automata::cancel()
+{
+	if (this->state == "CHECK" || this->state == "ACCEPT")
+	{
+		state = "WAIT";
+		this->cash = 0;
+	}
+}
+void automata::choise(int number)
+{
+	this->state = "CHECK";
+	if (this->check(number))
+	{
+		cout <<"NOT ENOUGHT MONEY";	
+		cancel();
+	}
+	else
+	{
+		cout << "ALL OK";
+		this->cash -= this->prices[number - 1];
+		this->cook(number);
+	}
+}
+bool automata::check(int number)
+{
+	if (this->cash < number)
+		return 1;
+	else 
+		return 0;
+}
+void automata::cook(int number)
+{
+	this->state = "COOKING";
+	cout << "COOKING" << menu[number - 1];
+	this->finish();
+}
+void automata::finish() 
+{
+	cout << "TAKE YOUR COFFEE";
+	this->state = "WAIT";
+}
+
+void main()
+{
+	automata COFFEE;
+
+}
